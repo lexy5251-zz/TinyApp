@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>One URL</title>
+</head>
+
+<body>
+    <% include partials/_header %>
+        <a href="/urls">Back</a>
+        <h1>Short URL:</h1>
+        <h2><%=shortURL%></h2>
+        <form action="/urls/<%=shortURL%>/update" method="POST">
+            <input type="hidden" name="shortURL " value="<%=shortURL%>">
+            <input type="text" name="longURL" value="<%=longURL%>" style="width: 300px">
+            <button type="submit">update</button>
+        </form>
+        <!-- Add your EJS code here -->
+</body>
+
+</html>
