@@ -6,10 +6,36 @@ const app = express();
 
 //"Database"
 const users = [];
+//store an incrementing number of IDs of each user
+let nextUserId = 1;
+
+
+//example
+//check ID matches the ID in the database
+// const fetchUser = id => {
+//   for (let i = 0; i < users.length; i++){
+//     const user = users[i];
+//     if (user.id === id) {
+//       return user;
+//     }
+//   }
+//   return null;
+// };
+
+const fetchUserByUsername = username => {
+   for (let i = 0; i < users.length; i++) {
+    const user = users[i];
+    if (user.username === username){
+      return user;
+    }
+   }
+
+   return null;
+};
 
 //Use cookies
 const cookieParser = require('cookie-parser');
-app.use(cookieParser());
+
 
 //Setup middleware
 app.use(
@@ -17,6 +43,7 @@ app.use(
         extended: false
     })
 );
+app.use(cookieParser());
 
 app.set("view engine", "ejs");
 
@@ -41,22 +68,22 @@ const urlDatabase = {
 // list of urls
 
 app.get("/urls", (req, res) => {
-  res.render("urls_index",{
-    urls: urlDatabase
-  });
+    let templateVars = {
+        urls: urlDatabase,
+        username: req.cookies.username
+
+    }
+    res.render("urls_index", templateVars);
 });
 
 
+//example
+//GET
 // app.get("/urls", (req, res) => {
-//     if (req.cookies['username']) {
-
-//         // render html with "hello, req.cookies['username']"
-//         res.render("urls_index", username: req.cookies["username"]);
-//     } else {
-//         // render html with form
-//             res.cookie('username', username),
-//             res.redirect("/urls");
-//     }
+//     const user = fetchUser(parseInt(req.cookies.user_id, 10));
+//     res.render("urls_index", {
+//       user : user
+//     })
 // });
 
 // New - GET /urls/new
@@ -71,7 +98,7 @@ app.post("/urls", (req, res) => {
     let shortURL = generateRandomString();
     let longURL = req.body.longURL;
     urlDatabase[shortURL] = longURL;
-    console.log(req.body.longURL); // debug statement to see POST parameters
+    // console.log(req.body.longURL); // debug statement to see POST parameters
     res.redirect("/urls"); // Respond with 'Ok' (we will replace this)
 });
 
@@ -90,35 +117,37 @@ app.post("/urls", (req, res) => {
 
 // show a specific url - GET /urls/:id
 app.get("/urls/:id", (req, res) => {
-    res.render("urls_show", {
+    let templateVars = {
         urls: urlDatabase,
         shortURL: req.params.id,
         longURL: urlDatabase[req.params.id]
-    });
+    }
+    res.render("urls_show", templateVars);
 
 });
 
 // Edit - GET /urls/:id/edit
 app.get("/urls/:id/edit", (req, res) => {
-    const id = req.params.id;
-    const url = urlDatabase[id];
-    res.render("urls/shortURL", {
+    let templateVars = {
         id: id,
         url: url
-    });
+    }
+    const id = req.params.id;
+    const url = urlDatabase[id];
+    res.render("urls/shortURL", templateVars);
 });
 
 
 // Update - POST /urls/:id
 app.post("/urls/:id/update", (req, res) => {
     let shortURL = req.params.id;
-    let longURL = req.body.longURL;//equals req.params.id
+    let longURL = req.body.longURL; //equals req.params.id
     if (longURL) {
-      // set this specific url to equal the contents of the form
-      urlDatabase[shortURL] = longURL;
-      res.render("urls_index", { urls: urlDatabase });
+        // set this specific url to equal the contents of the form
+        urlDatabase[shortURL] = longURL;
+        res.render("urls_index", { urls: urlDatabase });
     } else {
-      res.redirect("/urls")
+        res.redirect("/urls")
     }
 
 });
@@ -127,19 +156,91 @@ app.post("/urls/:id/update", (req, res) => {
 // Delete
 app.post("/urls/:id/delete", (req, res) => {
     delete urlDatabase[req.params.id];
-    res.redirect("/urls");
+    res.redirect("/urls/index");
 });
 
+//example
+//POST /Login - process Login
+// app.post("/urls/login", (req,res) => {
+//     const { username, password} = req.body;
 
-
-
-
-// //Login - POST /urls/login
-// app.post("/urls/login", (req, res) => {
-//     res.cookie("username",Your username);
-//     res.redirect("urls/");
+//     if (username && password) {
+//       const user = fetchUserByUsername(username);
+//       if (user && user.password === password) {
+//         res.cookie('user_id', user_id, {maxAge: 10 * 60 * 1000});
+//         res.redirect(/urls);
+//       } else {
+//         console.log("wrong username or password");
+//         res.redirect("/urls/login");
+//       }
+//     } else {
+//       console.log("Please provide username and password");
+//       res.redirect("/urls/login");
+//     }
 // });
 
+
+//Login - POST /urls/login urls_index render the login COOKIE
+app.post("/urls/login", (req, res) => {
+    const uname = req.body.username;
+    res.cookie('username', uname);
+    res.redirect("/urls/index");
+
+});
+
+//Login - username render urls_index
+app.get("/urls/index", (req, res) => {
+    let templateVars = {
+        urls: urlDatabase,
+        username: req.cookies["username"],
+    };
+    res.render("urls_index", templateVars);
+});
+
+//Logout
+app.post("/urls/logout", (req, res) => {
+   res.clearCookie("username");
+   res.redirect("/urls");
+})
+
+
+//example
+// //GET /register
+// app.get("/urls/register", (req, res) => {
+
+//     res.render("register");
+// });
+
+// //POST /register - process registration
+// app.post("/urls/register", (req, res) => {
+//   let templateVars = {
+//     username: req.body.username,
+//     password: req.body.password,
+//     password_confirm: req.body.password_confirm
+//   };
+
+//   if (username && password && password_confirm) {
+//     //two passwords are the same
+//     if (password === password_confirm) {
+//       let user = {
+//          id: nextUserId++,
+//          username: username,
+//          password: password
+//       };
+
+//       users.push(user);
+//       req.cookie('user_id', user_id, {maxAge:10 * 60 * 1000});
+//       res.redirect("/urls");
+
+//     } else {
+//       console.log("passwords does not match.");
+//       res.redirect("/urls/register");
+//     }
+//   } else {
+//     console.log("Please fill in the correct username, password and password_confirm");
+//     res.redirect("/urls/register");
+//   }
+// });
 
 
 
