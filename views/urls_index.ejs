@@ -4,9 +4,19 @@
   <title>TinyApp</title>
 </head>
 <body>
+
   <% include partials/_header %>
-<ul>
-   <% for (id in urls) { %>
+<% if (!user){ %>
+  <p>shortURL lists here:</p>
+  <% for (var shortURL in urlDatabase) { %>
+  <ul>
+  <a href="<%=urlDatabase[shortURL].userUrl%>"><%=shortURL%></a>
+  </ul>
+  <% }; %>
+
+<% } else { %>
+  <ul>
+   <% for (var id in urls) { %>
         <li>
          <h3>
           <%=id%>
@@ -14,21 +24,26 @@
          <a href="<%=urls[id]%>">
           <%=urls[id]%>
          </a>
-         <form method="POST" action="/urls/<%=id%>/delete">
 
-        <a href="/urls/<%=id%>">
+        <a href="/urls/<%=id%>/edit" style="padding: 20px">
           Edit
          </a>
-         <button type="submit">DELETE</button>
+         <form method="POST" action="/urls/<%=id%>/delete">
+         <p><button type="submit">DELETE</button></p>
+        </form>
         </li>
     <% }; %>
-    <a href="/urls/new">
-          Go to new url
-         </a>
+
+    <h4><a href="/urls/new">
+          Go to create a new url
+         </a></h4>
 
 </ul>
+<% } %>
 
 
-    <!-- Add your EJS code here -->
+
+
+
 </body>
 </html>

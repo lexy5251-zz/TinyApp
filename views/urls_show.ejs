@@ -8,8 +8,8 @@
 <body>
     <% include partials/_header %>
         <a href="/urls">Back to the home page</a>
-        <h2>Short URL:</h2>
-        <h2><%=shortURL%></h2>
+
+        <h2>Short URL: <%=shortURL%></h2>
         <form action="/urls/<%=shortURL%>/update" method="POST">
             <input type="hidden" name="shortURL " value="<%=shortURL%>">
             <input type="text" name="longURL" value="<%=longURL%>" style="width: 300px">
