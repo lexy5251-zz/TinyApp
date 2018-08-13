@@ -1,12 +1,21 @@
 # Project 2 TinyApp
 
+TinyApp is a full stack web application built with Node and Express that allows users to shorten URLs.
+
 ## Problem Statement
 
 GitHub repository name : lexy5251
 owner : lexy
 
 
-## Expected Usage
+## Dependencies
+
+- Node.js
+- Express
+- EJS
+- bcrypt
+- body-parser
+- cookie-session
 
 
-... (whatever else you'd like to include)
+It hasn't been finished well, to be continued.
