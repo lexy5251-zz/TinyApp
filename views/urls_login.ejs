@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Login Page</title>
+    <title>Login Page</title>
 </head>
+
 <body>
-<h2>Login form</h2>
-
-
-
-<div>
-  <form action="/urls/login" method="POST">
-    <input type="email" name="email" value="Enter email:">
-    <input type="password" name="password" value="password">
-    <input type="submit" value="login">
-  </form>
- </div>
-
-<p><a href="/urls">Back to home page</a></p>
-
+    <h2>Login form</h2>
+    <div>
+        <form action="/urls/login" method="POST">
+            <input type="email" name="email" value="Enter email:" style="padding: 5px">
+            <input type="password" name="password" value="password" style="padding: 5px">
+            <input type="submit" value="login" style="width: 100px; padding: 5px 0;font-size: 20px">
+        </form>
+    </div>
+    <div style="margin: 10px 0px"><a href="/urls">Back to home page</a></div>
 </body>
+
 </html>

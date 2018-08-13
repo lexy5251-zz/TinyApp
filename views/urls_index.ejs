@@ -1,49 +1,54 @@
+
 <!DOCTYPE html>
+
+
 <html lang="en">
+
+
 <head>
   <title>TinyApp</title>
 </head>
-<body>
 
-  <% include partials/_header %>
-<% if (!user){ %>
-  <p>shortURL lists here:</p>
-  <% for (var shortURL in urlDatabase) { %>
+<body><% include partials/_header %> <% if (!user){ %>
+  <p>shortURL lists here:</p><% for (var shortURL in urlDatabase) { %>
+
   <ul>
-  <a href="<%=urlDatabase[shortURL].userUrl%>"><%=shortURL%></a>
-  </ul>
-  <% }; %>
 
-<% } else { %>
-  <ul>
-   <% for (var id in urls) { %>
-        <li>
-         <h3>
-          <%=id%>
-         </h3>
-         <a href="<%=urls[id]%>">
-          <%=urls[id]%>
-         </a>
+    <li>
 
-        <a href="/urls/<%=id%>/edit" style="padding: 20px">
-          Edit
-         </a>
-         <form method="POST" action="/urls/<%=id%>/delete">
-         <p><button type="submit">DELETE</button></p>
-        </form>
-        </li>
-    <% }; %>
+      <a href="<%=urlDatabase[shortURL].userUrl%>"><%=shortURL%>
+      </a>
+    </li>
+  </ul><% }; %> <% } else { %>
 
-    <h4><a href="/urls/new">
-          Go to create a new url
-         </a></h4>
+  <ul><% for (var id in urls) { %>
 
-</ul>
-<% } %>
+    <li>
 
+      <h3><%=id%>
+      </h3>
 
+      <a href="<%=urls[id]%>"><%=urls[id]%>
+      </a>
 
+      <a href="/urls/<%=id%>/edit"
+        style="margin:20px; text-decoration: none; padding: 7px 20px; background-color: #d3d3d3c9; box-shadow: 1px 1px #8888881f">Edit
+      </a>
 
+      <form method="POST"
+        action="/urls/<%=id%>/delete">
 
+        <p>
+          <button type="submit" style="padding: 10px;">DELETE</button>
+        </p>
+      </form>
+    </li><% }; %>
+
+    <h4>
+
+      <a href="/urls/new">Go to create a new url
+      </a>
+    </h4>
+  </ul><% }; %>
 </body>
 </html>

@@ -6,6 +6,7 @@ const app = express();
 const bcrypt = require("bcrypt");
 const cookieSession = require('cookie-session');
 
+//user database
 const users = {
     "userRandomID": {
         id: "userRandomID",
@@ -29,7 +30,6 @@ const urlDatabase = {
         userID: "user2RandomID"
     }
 };
-
 
 //Setup middleware
 app.use(
@@ -64,10 +64,8 @@ function checkEmailExists(userEmail) {
             return true;
         }
     }
-
     return false;
 }
-
 
 function findUserByEmail(userEmail) {
     for (let user in users) {
@@ -78,7 +76,6 @@ function findUserByEmail(userEmail) {
     return null;
 }
 
-
 function urlsForUser(user_id) {
     let result = {};
     for (let shortURL in urlDatabase) {
@@ -86,7 +83,6 @@ function urlsForUser(user_id) {
             result[shortURL] = urlDatabase[shortURL].userUrl;
         }
     }
-
     return result;
 }
 
@@ -102,6 +98,7 @@ app.get("/urls", (req, res) => {
             user: user,
             urlDatabase: urlDatabase
         };
+
         res.render("urls_index", templateVars);
     } else {
         let templateVars = {
@@ -124,15 +121,10 @@ app.get("/urls/new", (req, res) => {
     } else {
         res.redirect("/urls/login");
     }
-
-
 });
-
 
 //create a url - POST /urls
 app.post("/urls/new", (req, res) => {
-
-
     if (req.session.user_id) {
         let newShortURL = generateRandomString();
         let newLongURL = req.body.longURL;
@@ -146,15 +138,12 @@ app.post("/urls/new", (req, res) => {
         let templateVars = {
             user: users[userId],
             urls: urlsForUser(userId)
-
         }
         res.render("urls_index", templateVars);
     } else {
         res.redirect("/urls/login");
     }
 });
-
-
 
 //Login - GET username render urls_login
 app.get("/urls/login", (req, res) => {
@@ -180,13 +169,11 @@ app.post("/urls/login", (req, res) => {
     }
 });
 
-
 //Logout
 app.post("/urls/logout", (req, res) => {
     req.session = null;
     res.redirect("/urls");
 });
-
 
 // //GET /register
 app.get("/urls/register", (req, res) => {
@@ -213,9 +200,7 @@ app.post("/urls/register", (req, res) => {
         req.session.user_id = id;
         res.redirect("/urls");
     };
-
 });
-
 
 // Delete
 app.post("/urls/:id/delete", (req, res) => {
@@ -225,9 +210,7 @@ app.post("/urls/:id/delete", (req, res) => {
     } else {
         res.redirect("/urls/login");
     }
-
 });
-
 
 // show a specific url - GET /urls/:id
 app.get("/urls/:id", (req, res) => {
@@ -238,9 +221,7 @@ app.get("/urls/:id", (req, res) => {
         user: users[req.session.user_id]
     }
     res.render("urls_show", templateVars);
-
 });
-
 
 // Edit - GET /urls/:id/edit
 app.get("/urls/:id/edit", (req, res) => {
@@ -251,7 +232,6 @@ app.get("/urls/:id/edit", (req, res) => {
     }
     res.render("urls_show", templateVars);
 });
-
 
 // Update - POST /urls/:id
 app.post("/urls/:id/update", (req, res) => {
@@ -264,14 +244,11 @@ app.post("/urls/:id/update", (req, res) => {
         let templateVars = {
             user: users[user_id],
             urls: urlsForUser(user_id)
-
         }
-
         res.render("urls_index", templateVars);
     } else {
         res.redirect("/urls/login");
     }
-
 });
 
 

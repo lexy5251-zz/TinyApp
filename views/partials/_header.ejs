@@ -6,23 +6,16 @@
 </head>
 
 <body>
-  <% if (user) { %>
-  <h2>Welcome</h2>
-  <form action="/urls/logout" method="POST">
-     <input type="submit" value="logout">
-  </form>
-
-  <% } else { %>
-  <h2>Please Login or Register here:</h2>
-  <p><a href="/urls/login">Login</a></p>
-  <p><a href="/urls/register">Register</a></p>
-  <% } %>
-
-
-
-
-
-
+    <% if (user) { %>
+        <h2>Welcome</h2>
+        <form action="/urls/logout" method="POST">
+            <input type="submit" value="logout" style="font-size: 20px">
+        </form>
+        <% } else { %>
+            <h2>Please Login or Register here:</h2>
+            <a href="/urls/login" style="margin:10px; text-decoration: none; padding: 7px 20px; background-color: #d3d3d3c9; box-shadow: 1px 1px #8888881f">Login</a>
+            <a href="/urls/register" style="margin:10px; text-decoration: none; padding: 7px 20px; background-color: #d3d3d3c9; box-shadow: 1px 1px #8888881f">Register</a>
+            <% } %>
 </body>
 
 </html>
