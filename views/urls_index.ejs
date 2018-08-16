@@ -9,7 +9,8 @@
   <title>TinyApp</title>
 </head>
 
-<body><% include partials/_header %> <% if (!user){ %>
+<body>
+  <% include partials/_header %> <% if (!user){ %>
   <p>shortURL lists here:</p><% for (var shortURL in urlDatabase) { %>
 
   <ul>

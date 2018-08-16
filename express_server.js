@@ -55,7 +55,7 @@ function generateRandomString() {
         result += chars[Math.floor(Math.random() * chars.length)]
     }
     return result;
-}
+};
 
 //Registration - check whether email has already existed.
 function checkEmailExists(userEmail) {
@@ -65,7 +65,7 @@ function checkEmailExists(userEmail) {
         }
     }
     return false;
-}
+};
 
 function findUserByEmail(userEmail) {
     for (let user in users) {
@@ -74,7 +74,7 @@ function findUserByEmail(userEmail) {
         }
     }
     return null;
-}
+};
 
 function urlsForUser(user_id) {
     let result = {};
@@ -84,7 +84,7 @@ function urlsForUser(user_id) {
         }
     }
     return result;
-}
+};
 
 //route sending data to urls_index.ejs
 // list of urls/ index page
@@ -233,11 +233,18 @@ app.get("/urls/:id/edit", (req, res) => {
     res.render("urls_show", templateVars);
 });
 
+
 //handle shortURL request
 // to remember to get :id should use body-parser
 app.get("/u/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL);
+  let shortURL = req.params.shortURL;
+  if (req.session.user_id === urlDatabase[shortURL].userID){
+    let longURL = urlDatabase[shortURL].userUrl;
+    res.redirect(longURL);
+  } else {
+    res.redirect("/urls/login");
+  }
+
 });
 
 
