@@ -233,6 +233,15 @@ app.get("/urls/:id/edit", (req, res) => {
     res.render("urls_show", templateVars);
 });
 
+//handle shortURL request
+// to remember to get :id should use body-parser
+app.get("/u/:shortURL", (req, res) => {
+  let longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
+});
+
+
+
 // Update - POST /urls/:id
 app.post("/urls/:id/update", (req, res) => {
     let updateShortURL = req.params.id;
